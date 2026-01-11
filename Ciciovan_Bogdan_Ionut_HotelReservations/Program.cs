@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Ciciovan_Bogdan_Ionut_HotelReservations.Data;
+using Ciciovan_Bogdan_Ionut_HotelReservations.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,11 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<HotelReservationsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddHttpClient<IPredictionService, PredictionService>(client =>
+{
+    client.BaseAddress = new Uri("https://localhost:50490");
+});
 
 var app = builder.Build();
 

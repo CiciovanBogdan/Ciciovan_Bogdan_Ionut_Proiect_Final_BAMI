@@ -1,0 +1,720 @@
+﻿{
+  "Scenario": "Classification",
+  "DataSource": {
+    "Version": 3,
+    "EscapeCharacter": "\"",
+    "ReadMultiLines": false,
+    "KeepDiacritics": false,
+    "KeepPunctuations": false,
+    "AllowQuoting": false,
+    "Type": "TabularFile",
+    "FilePath": "D:\\Facultate_Materiale\\BAMI\\Anul 1\\SEM 1\\Dezvoltarea de sisteme de Big Data\\Proiecte\\Ciciovan_Bogdan_Ionut_Proiect_Final_BAMI\\Hotel Reservations.csv",
+    "Delimiter": ",",
+    "DecimalMarker": ".",
+    "HasHeader": true,
+    "ColumnProperties": [
+      {
+        "ColumnName": "Booking_ID",
+        "ColumnPurpose": "Ignore",
+        "ColumnDataFormat": "String",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "no_of_adults",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "no_of_children",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "no_of_weekend_nights",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "no_of_week_nights",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "type_of_meal_plan",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "String",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "required_car_parking_space",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "room_type_reserved",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "String",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "lead_time",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "arrival_year",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "arrival_month",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "arrival_date",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "market_segment_type",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "String",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "repeated_guest",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "no_of_previous_cancellations",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "no_of_previous_bookings_not_canceled",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "avg_price_per_room",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": false,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "no_of_special_requests",
+        "ColumnPurpose": "Feature",
+        "ColumnDataFormat": "Single",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      },
+      {
+        "ColumnName": "booking_status",
+        "ColumnPurpose": "Label",
+        "ColumnDataFormat": "String",
+        "IsCategorical": true,
+        "Type": "Column",
+        "Version": 5
+      }
+    ]
+  },
+  "Environment": {
+    "Type": "LocalCPU",
+    "Version": 1
+  },
+  "RunHistory": {
+    "Version": 3,
+    "Type": "Result",
+    "Trials": [
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "LightGbmMulti",
+        "Score": 0.88319586822524943,
+        "RuntimeInSeconds": 11.753,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e3 * e6 * e11",
+          "e0": {
+            "OutputColumnNames": [
+              "type_of_meal_plan",
+              "room_type_reserved",
+              "market_segment_type"
+            ],
+            "InputColumnNames": [
+              "type_of_meal_plan",
+              "room_type_reserved",
+              "market_segment_type"
+            ]
+          },
+          "e1": {
+            "OutputColumnNames": [
+              "no_of_adults",
+              "no_of_children",
+              "no_of_weekend_nights",
+              "no_of_week_nights",
+              "required_car_parking_space",
+              "lead_time",
+              "arrival_year",
+              "arrival_month",
+              "arrival_date",
+              "repeated_guest",
+              "no_of_previous_cancellations",
+              "no_of_previous_bookings_not_canceled",
+              "avg_price_per_room",
+              "no_of_special_requests"
+            ],
+            "InputColumnNames": [
+              "no_of_adults",
+              "no_of_children",
+              "no_of_weekend_nights",
+              "no_of_week_nights",
+              "required_car_parking_space",
+              "lead_time",
+              "arrival_year",
+              "arrival_month",
+              "arrival_date",
+              "repeated_guest",
+              "no_of_previous_cancellations",
+              "no_of_previous_bookings_not_canceled",
+              "avg_price_per_room",
+              "no_of_special_requests"
+            ]
+          },
+          "e11": {
+            "OutputColumnName": "PredictedLabel",
+            "InputColumnName": "PredictedLabel"
+          },
+          "e2": {
+            "InputColumnNames": [
+              "type_of_meal_plan",
+              "room_type_reserved",
+              "market_segment_type",
+              "no_of_adults",
+              "no_of_children",
+              "no_of_weekend_nights",
+              "no_of_week_nights",
+              "required_car_parking_space",
+              "lead_time",
+              "arrival_year",
+              "arrival_month",
+              "arrival_date",
+              "repeated_guest",
+              "no_of_previous_cancellations",
+              "no_of_previous_bookings_not_canceled",
+              "avg_price_per_room",
+              "no_of_special_requests"
+            ],
+            "OutputColumnName": "Features"
+          },
+          "e3": {
+            "OutputColumnName": "booking_status",
+            "InputColumnName": "booking_status",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e6": {
+            "NumberOfLeaves": 2312,
+            "MinimumExampleCountPerLeaf": 27,
+            "LearningRate": 0.27072042109609873,
+            "NumberOfTrees": 621,
+            "SubsampleFraction": 0.99999977667298645,
+            "MaximumBinCountPerFeature": 147,
+            "FeatureFraction": 0.92918739902951808,
+            "L1Regularization": 1.4870571693887196E-09,
+            "L2Regularization": 0.104523539641825,
+            "LabelColumnName": "booking_status",
+            "FeatureColumnName": "Features"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "LightGbmMulti",
+        "Score": 0.88182458123393115,
+        "RuntimeInSeconds": 30.44,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e3 * e6 * e11",
+          "e0": {
+            "OutputColumnNames": [
+              "type_of_meal_plan",
+              "room_type_reserved",
+              "market_segment_type"
+            ],
+            "InputColumnNames": [
+              "type_of_meal_plan",
+              "room_type_reserved",
+              "market_segment_type"
+            ]
+          },
+          "e1": {
+            "OutputColumnNames": [
+              "no_of_adults",
+              "no_of_children",
+              "no_of_weekend_nights",
+              "no_of_week_nights",
+              "required_car_parking_space",
+              "lead_time",
+              "arrival_year",
+              "arrival_month",
+              "arrival_date",
+              "repeated_guest",
+              "no_of_previous_cancellations",
+              "no_of_previous_bookings_not_canceled",
+              "avg_price_per_room",
+              "no_of_special_requests"
+            ],
+            "InputColumnNames": [
+              "no_of_adults",
+              "no_of_children",
+              "no_of_weekend_nights",
+              "no_of_week_nights",
+              "required_car_parking_space",
+              "lead_time",
+              "arrival_year",
+              "arrival_month",
+              "arrival_date",
+              "repeated_guest",
+              "no_of_previous_cancellations",
+              "no_of_previous_bookings_not_canceled",
+              "avg_price_per_room",
+              "no_of_special_requests"
+            ]
+          },
+          "e11": {
+            "OutputColumnName": "PredictedLabel",
+            "InputColumnName": "PredictedLabel"
+          },
+          "e2": {
+            "InputColumnNames": [
+              "type_of_meal_plan",
+              "room_type_reserved",
+              "market_segment_type",
+              "no_of_adults",
+              "no_of_children",
+              "no_of_weekend_nights",
+              "no_of_week_nights",
+              "required_car_parking_space",
+              "lead_time",
+              "arrival_year",
+              "arrival_month",
+              "arrival_date",
+              "repeated_guest",
+              "no_of_previous_cancellations",
+              "no_of_previous_bookings_not_canceled",
+              "avg_price_per_room",
+              "no_of_special_requests"
+            ],
+            "OutputColumnName": "Features"
+          },
+          "e3": {
+            "OutputColumnName": "booking_status",
+            "InputColumnName": "booking_status",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e6": {
+            "NumberOfLeaves": 1647,
+            "MinimumExampleCountPerLeaf": 45,
+            "LearningRate": 0.07921683830760505,
+            "NumberOfTrees": 1813,
+            "SubsampleFraction": 0.99999977667298645,
+            "MaximumBinCountPerFeature": 145,
+            "FeatureFraction": 0.95776637488566219,
+            "L1Regularization": 4.1729596391716929E-09,
+            "L2Regularization": 0.0030335583760269865,
+            "LabelColumnName": "booking_status",
+            "FeatureColumnName": "Features"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "LightGbmMulti",
+        "Score": 0.88119886058287888,
+        "RuntimeInSeconds": 19.489,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e3 * e6 * e11",
+          "e0": {
+            "OutputColumnNames": [
+              "type_of_meal_plan",
+              "room_type_reserved",
+              "market_segment_type"
+            ],
+            "InputColumnNames": [
+              "type_of_meal_plan",
+              "room_type_reserved",
+              "market_segment_type"
+            ]
+          },
+          "e1": {
+            "OutputColumnNames": [
+              "no_of_adults",
+              "no_of_children",
+              "no_of_weekend_nights",
+              "no_of_week_nights",
+              "required_car_parking_space",
+              "lead_time",
+              "arrival_year",
+              "arrival_month",
+              "arrival_date",
+              "repeated_guest",
+              "no_of_previous_cancellations",
+              "no_of_previous_bookings_not_canceled",
+              "avg_price_per_room",
+              "no_of_special_requests"
+            ],
+            "InputColumnNames": [
+              "no_of_adults",
+              "no_of_children",
+              "no_of_weekend_nights",
+              "no_of_week_nights",
+              "required_car_parking_space",
+              "lead_time",
+              "arrival_year",
+              "arrival_month",
+              "arrival_date",
+              "repeated_guest",
+              "no_of_previous_cancellations",
+              "no_of_previous_bookings_not_canceled",
+              "avg_price_per_room",
+              "no_of_special_requests"
+            ]
+          },
+          "e11": {
+            "OutputColumnName": "PredictedLabel",
+            "InputColumnName": "PredictedLabel"
+          },
+          "e2": {
+            "InputColumnNames": [
+              "type_of_meal_plan",
+              "room_type_reserved",
+              "market_segment_type",
+              "no_of_adults",
+              "no_of_children",
+              "no_of_weekend_nights",
+              "no_of_week_nights",
+              "required_car_parking_space",
+              "lead_time",
+              "arrival_year",
+              "arrival_month",
+              "arrival_date",
+              "repeated_guest",
+              "no_of_previous_cancellations",
+              "no_of_previous_bookings_not_canceled",
+              "avg_price_per_room",
+              "no_of_special_requests"
+            ],
+            "OutputColumnName": "Features"
+          },
+          "e3": {
+            "OutputColumnName": "booking_status",
+            "InputColumnName": "booking_status",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e6": {
+            "NumberOfLeaves": 1902,
+            "MinimumExampleCountPerLeaf": 30,
+            "LearningRate": 0.18705087581982921,
+            "NumberOfTrees": 1228,
+            "SubsampleFraction": 0.97068312603331586,
+            "MaximumBinCountPerFeature": 167,
+            "FeatureFraction": 0.8143404577086053,
+            "L1Regularization": 5.1078123338046555E-10,
+            "L2Regularization": 0.022856705259981718,
+            "LabelColumnName": "booking_status",
+            "FeatureColumnName": "Features"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "LightGbmMulti",
+        "Score": 0.88080021597454727,
+        "RuntimeInSeconds": 13.686,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e3 * e6 * e11",
+          "e0": {
+            "OutputColumnNames": [
+              "type_of_meal_plan",
+              "room_type_reserved",
+              "market_segment_type"
+            ],
+            "InputColumnNames": [
+              "type_of_meal_plan",
+              "room_type_reserved",
+              "market_segment_type"
+            ]
+          },
+          "e1": {
+            "OutputColumnNames": [
+              "no_of_adults",
+              "no_of_children",
+              "no_of_weekend_nights",
+              "no_of_week_nights",
+              "required_car_parking_space",
+              "lead_time",
+              "arrival_year",
+              "arrival_month",
+              "arrival_date",
+              "repeated_guest",
+              "no_of_previous_cancellations",
+              "no_of_previous_bookings_not_canceled",
+              "avg_price_per_room",
+              "no_of_special_requests"
+            ],
+            "InputColumnNames": [
+              "no_of_adults",
+              "no_of_children",
+              "no_of_weekend_nights",
+              "no_of_week_nights",
+              "required_car_parking_space",
+              "lead_time",
+              "arrival_year",
+              "arrival_month",
+              "arrival_date",
+              "repeated_guest",
+              "no_of_previous_cancellations",
+              "no_of_previous_bookings_not_canceled",
+              "avg_price_per_room",
+              "no_of_special_requests"
+            ]
+          },
+          "e11": {
+            "OutputColumnName": "PredictedLabel",
+            "InputColumnName": "PredictedLabel"
+          },
+          "e2": {
+            "InputColumnNames": [
+              "type_of_meal_plan",
+              "room_type_reserved",
+              "market_segment_type",
+              "no_of_adults",
+              "no_of_children",
+              "no_of_weekend_nights",
+              "no_of_week_nights",
+              "required_car_parking_space",
+              "lead_time",
+              "arrival_year",
+              "arrival_month",
+              "arrival_date",
+              "repeated_guest",
+              "no_of_previous_cancellations",
+              "no_of_previous_bookings_not_canceled",
+              "avg_price_per_room",
+              "no_of_special_requests"
+            ],
+            "OutputColumnName": "Features"
+          },
+          "e3": {
+            "OutputColumnName": "booking_status",
+            "InputColumnName": "booking_status",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e6": {
+            "NumberOfLeaves": 997,
+            "MinimumExampleCountPerLeaf": 24,
+            "LearningRate": 0.59171398508308037,
+            "NumberOfTrees": 1044,
+            "SubsampleFraction": 0.99999977667298645,
+            "MaximumBinCountPerFeature": 213,
+            "FeatureFraction": 0.93738392858850417,
+            "L1Regularization": 1.4118620610902168E-09,
+            "L2Regularization": 0.99999977667298645,
+            "LabelColumnName": "booking_status",
+            "FeatureColumnName": "Features"
+          }
+        }
+      },
+      {
+        "Version": 1,
+        "Type": "Trial",
+        "TrainerName": "LightGbmMulti",
+        "Score": 0.88071443169174168,
+        "RuntimeInSeconds": 22.04,
+        "Parameter": {
+          "_SCHEMA_": "e0 * e1 * e2 * e3 * e6 * e11",
+          "e0": {
+            "OutputColumnNames": [
+              "type_of_meal_plan",
+              "room_type_reserved",
+              "market_segment_type"
+            ],
+            "InputColumnNames": [
+              "type_of_meal_plan",
+              "room_type_reserved",
+              "market_segment_type"
+            ]
+          },
+          "e1": {
+            "OutputColumnNames": [
+              "no_of_adults",
+              "no_of_children",
+              "no_of_weekend_nights",
+              "no_of_week_nights",
+              "required_car_parking_space",
+              "lead_time",
+              "arrival_year",
+              "arrival_month",
+              "arrival_date",
+              "repeated_guest",
+              "no_of_previous_cancellations",
+              "no_of_previous_bookings_not_canceled",
+              "avg_price_per_room",
+              "no_of_special_requests"
+            ],
+            "InputColumnNames": [
+              "no_of_adults",
+              "no_of_children",
+              "no_of_weekend_nights",
+              "no_of_week_nights",
+              "required_car_parking_space",
+              "lead_time",
+              "arrival_year",
+              "arrival_month",
+              "arrival_date",
+              "repeated_guest",
+              "no_of_previous_cancellations",
+              "no_of_previous_bookings_not_canceled",
+              "avg_price_per_room",
+              "no_of_special_requests"
+            ]
+          },
+          "e11": {
+            "OutputColumnName": "PredictedLabel",
+            "InputColumnName": "PredictedLabel"
+          },
+          "e2": {
+            "InputColumnNames": [
+              "type_of_meal_plan",
+              "room_type_reserved",
+              "market_segment_type",
+              "no_of_adults",
+              "no_of_children",
+              "no_of_weekend_nights",
+              "no_of_week_nights",
+              "required_car_parking_space",
+              "lead_time",
+              "arrival_year",
+              "arrival_month",
+              "arrival_date",
+              "repeated_guest",
+              "no_of_previous_cancellations",
+              "no_of_previous_bookings_not_canceled",
+              "avg_price_per_room",
+              "no_of_special_requests"
+            ],
+            "OutputColumnName": "Features"
+          },
+          "e3": {
+            "OutputColumnName": "booking_status",
+            "InputColumnName": "booking_status",
+            "AddKeyValueAnnotationsAsText": false
+          },
+          "e6": {
+            "NumberOfLeaves": 3012,
+            "MinimumExampleCountPerLeaf": 22,
+            "LearningRate": 0.44475747497055562,
+            "NumberOfTrees": 1758,
+            "SubsampleFraction": 0.2998780403614828,
+            "MaximumBinCountPerFeature": 127,
+            "FeatureFraction": 0.89819662597603744,
+            "L1Regularization": 1.1924775369439461E-09,
+            "L2Regularization": 0.066789731942029473,
+            "LabelColumnName": "booking_status",
+            "FeatureColumnName": "Features"
+          }
+        }
+      }
+    ],
+    "Estimators": {
+      "e0": "OneHotEncoding",
+      "e1": "ReplaceMissingValues",
+      "e2": "Concatenate",
+      "e3": "MapValueToKey",
+      "e4": "FastTreeOva",
+      "e5": "FastForestOva",
+      "e6": "LightGbmMulti",
+      "e7": "LbfgsLogisticRegressionOva",
+      "e8": "LbfgsMaximumEntropyMulti",
+      "e9": "SdcaMaximumEntropyMulti",
+      "e10": "SdcaLogisticRegressionOva",
+      "e11": "MapKeyToValue"
+    },
+    "Schema": "e0 * e1 * e2 * e3 * (e4 + e5 + e6 + e7 + e8 + e9 + e10) * e11",
+    "MetricName": "MacroAccuracy",
+    "ModelFilePath": "D:\\Facultate_Materiale\\BAMI\\Anul 1\\SEM 1\\Dezvoltarea de sisteme de Big Data\\Proiecte\\Ciciovan_Bogdan_Ionut_Proiect_Final_BAMI\\Ciciovan_Bogdan_Ionut_HotelReservations\\BookingCancellationModel.mlnet"
+  },
+  "Type": "TrainingConfig",
+  "Version": 5,
+  "TrainingOption": {
+    "Version": 2,
+    "Subsampling": false,
+    "Tuner": "eci-cfo",
+    "Type": "ClassificationTrainingOption",
+    "TrainingTime": 300,
+    "OptimizeMetric": "MacroAccuracy",
+    "LabelColumn": "booking_status",
+    "AvailableTrainers": [
+      "SDCA",
+      "LBFGS",
+      "LGBM",
+      "FASTTREE",
+      "FASTFOREST"
+    ],
+    "ValidationOption": {
+      "Version": 0,
+      "Type": "TrainValidateSplitValidationOption",
+      "SplitRatio": 0.2
+    }
+  }
+}
