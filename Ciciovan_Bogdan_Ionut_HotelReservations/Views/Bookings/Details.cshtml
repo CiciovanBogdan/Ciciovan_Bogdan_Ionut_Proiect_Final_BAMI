@@ -1,0 +1,116 @@
+﻿@model Ciciovan_Bogdan_Ionut_HotelReservations.Models.Booking
+
+@{
+    ViewData["Title"] = "Booking Details";
+}
+
+<h1>Booking Details</h1>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        <h4 class="mb-0">Reservation Information - @Model.BookingCode</h4>
+    </div>
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Booking Code</dt>
+            <dd class="col-sm-9"><strong>@Model.BookingCode</strong></dd>
+
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">
+                @if (Model.BookingStatus == "Confirmed")
+                {
+                    <span class="badge bg-success">@Model.BookingStatus</span>
+                }
+                else if (Model.BookingStatus == "Canceled")
+                {
+                    <span class="badge bg-danger">@Model.BookingStatus</span>
+                }
+                else if (Model.BookingStatus == "Pending")
+                {
+                    <span class="badge bg-warning text-dark">@Model.BookingStatus</span>
+                }
+                else
+                {
+                    <span class="badge bg-info">@Model.BookingStatus</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Customer</dt>
+            <dd class="col-sm-9">
+                @Model.Customer.FirstName @Model.Customer.LastName<br />
+                <small class="text-muted">@Model.Customer.Email</small>
+            </dd>
+
+            <dt class="col-sm-3">Room Type</dt>
+            <dd class="col-sm-9">
+                <strong>@Model.RoomType.RoomTypeName</strong><br />
+                <small class="text-muted">@Model.RoomType.Description</small>
+            </dd>
+
+            <dt class="col-sm-3">Meal Plan</dt>
+            <dd class="col-sm-9">
+                @if (Model.MealPlan != null)
+                {
+                    <text>@Model.MealPlan.PlanName</text>
+                }
+                else
+                {
+                    <text>Not Selected</text>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Arrival Date</dt>
+            <dd class="col-sm-9">@Model.ArrivalDate.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Check-out Date</dt>
+            <dd class="col-sm-9">@Model.CheckOutDate.ToString("dd/MM/yyyy")</dd>
+
+            <dt class="col-sm-3">Duration</dt>
+            <dd class="col-sm-9">
+                @(Model.NoOfWeekendNights + Model.NoOfWeekNights) nights
+                <small class="text-muted">(@Model.NoOfWeekendNights weekend, @Model.NoOfWeekNights weekday)</small>
+            </dd>
+
+            <dt class="col-sm-3">Guests</dt>
+            <dd class="col-sm-9">@Model.NoOfAdults Adults, @Model.NoOfChildren Children</dd>
+
+            <dt class="col-sm-3">Car Parking</dt>
+            <dd class="col-sm-9">
+                @if (Model.RequiredCarParking)
+                {
+                    <span class="badge bg-success">Yes</span>
+                }
+                else
+                {
+                    <span class="badge bg-secondary">No</span>
+                }
+            </dd>
+
+            <dt class="col-sm-3">Special Requests</dt>
+            <dd class="col-sm-9">@Model.NoOfSpecialRequests</dd>
+
+            <dt class="col-sm-3">Market Segment</dt>
+            <dd class="col-sm-9">@Model.MarketSegmentType</dd>
+
+            <dt class="col-sm-3">Lead Time</dt>
+            <dd class="col-sm-9">@Model.LeadTime days</dd>
+
+            <dt class="col-sm-3">Price per Night</dt>
+            <dd class="col-sm-9">@Model.AvgPricePerRoom.ToString("C")</dd>
+
+            <dt class="col-sm-3"><strong>Total Price</strong></dt>
+            <dd class="col-sm-9"><strong class="text-success">@Model.TotalPrice.ToString("C")</strong></dd>
+
+            <dt class="col-sm-3">Created Date</dt>
+            <dd class="col-sm-9">@Model.CreatedDate.ToString("dd/MM/yyyy HH:mm")</dd>
+
+            <dt class="col-sm-3">Last Modified</dt>
+            <dd class="col-sm-9">@Model.LastModifiedDate.ToString("dd/MM/yyyy HH:mm")</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="mt-3">
+    <a asp-action="Edit" asp-route-id="@Model.BookingId" class="btn btn-warning">Edit</a>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</div>
