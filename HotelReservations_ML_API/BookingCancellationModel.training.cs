@@ -10,6 +10,9 @@ using Microsoft.ML.Data;
 using Microsoft.ML.Trainers;
 using Microsoft.ML.Trainers.LightGbm;
 using Microsoft.ML.Transforms;
+
+namespace HotelReservations_ML_API
+{
     public partial class BookingCancellationModel
     {
         public const string RetrainFilePath =  @"D:\Facultate_Materiale\BAMI\Anul 1\SEM 1\Dezvoltarea de sisteme de Big Data\Proiecte\Ciciovan_Bogdan_Ionut_Proiect_Final_BAMI\Hotel Reservations.csv";
@@ -89,13 +92,13 @@ using Microsoft.ML.Transforms;
         {
             // Data process configuration with pipeline data transformations
             var pipeline = mlContext.Transforms.Categorical.OneHotEncoding(new []{new InputOutputColumnPair(@"type_of_meal_plan", @"type_of_meal_plan"),new InputOutputColumnPair(@"room_type_reserved", @"room_type_reserved"),new InputOutputColumnPair(@"market_segment_type", @"market_segment_type")}, outputKind: OneHotEncodingEstimator.OutputKind.Indicator)      
-                                    .Append(mlContext.Transforms.ReplaceMissingValues(new []{new InputOutputColumnPair(@"no_of_adults", @"no_of_adults"),new InputOutputColumnPair(@"no_of_children", @"no_of_children"),new InputOutputColumnPair(@"no_of_weekend_nights", @"no_of_weekend_nights"),new InputOutputColumnPair(@"no_of_week_nights", @"no_of_week_nights"),new InputOutputColumnPair(@"required_car_parking_space", @"required_car_parking_space"),new InputOutputColumnPair(@"lead_time", @"lead_time"),new InputOutputColumnPair(@"arrival_year", @"arrival_year"),new InputOutputColumnPair(@"arrival_month", @"arrival_month"),new InputOutputColumnPair(@"arrival_date", @"arrival_date"),new InputOutputColumnPair(@"repeated_guest", @"repeated_guest"),new InputOutputColumnPair(@"no_of_previous_cancellations", @"no_of_previous_cancellations"),new InputOutputColumnPair(@"no_of_previous_bookings_not_canceled", @"no_of_previous_bookings_not_canceled"),new InputOutputColumnPair(@"avg_price_per_room", @"avg_price_per_room"),new InputOutputColumnPair(@"no_of_special_requests", @"no_of_special_requests")}))      
-                                    .Append(mlContext.Transforms.Concatenate(@"Features", new []{@"type_of_meal_plan",@"room_type_reserved",@"market_segment_type",@"no_of_adults",@"no_of_children",@"no_of_weekend_nights",@"no_of_week_nights",@"required_car_parking_space",@"lead_time",@"arrival_year",@"arrival_month",@"arrival_date",@"repeated_guest",@"no_of_previous_cancellations",@"no_of_previous_bookings_not_canceled",@"avg_price_per_room",@"no_of_special_requests"}))      
+                                    .Append(mlContext.Transforms.ReplaceMissingValues(new []{new InputOutputColumnPair(@"no_of_adults", @"no_of_adults"),new InputOutputColumnPair(@"no_of_children", @"no_of_children"),new InputOutputColumnPair(@"no_of_weekend_nights", @"no_of_weekend_nights"),new InputOutputColumnPair(@"no_of_week_nights", @"no_of_week_nights"),new InputOutputColumnPair(@"required_car_parking_space", @"required_car_parking_space"),new InputOutputColumnPair(@"lead_time", @"lead_time"),new InputOutputColumnPair(@"arrival_month", @"arrival_month"),new InputOutputColumnPair(@"repeated_guest", @"repeated_guest"),new InputOutputColumnPair(@"no_of_previous_cancellations", @"no_of_previous_cancellations"),new InputOutputColumnPair(@"no_of_previous_bookings_not_canceled", @"no_of_previous_bookings_not_canceled"),new InputOutputColumnPair(@"avg_price_per_room", @"avg_price_per_room"),new InputOutputColumnPair(@"no_of_special_requests", @"no_of_special_requests")}))      
+                                    .Append(mlContext.Transforms.Concatenate(@"Features", new []{@"type_of_meal_plan",@"room_type_reserved",@"market_segment_type",@"no_of_adults",@"no_of_children",@"no_of_weekend_nights",@"no_of_week_nights",@"required_car_parking_space",@"lead_time",@"arrival_month",@"repeated_guest",@"no_of_previous_cancellations",@"no_of_previous_bookings_not_canceled",@"avg_price_per_room",@"no_of_special_requests"}))      
                                     .Append(mlContext.Transforms.Conversion.MapValueToKey(outputColumnName:@"booking_status",inputColumnName:@"booking_status",addKeyValueAnnotationsAsText:false))      
-                                    .Append(mlContext.MulticlassClassification.Trainers.LightGbm(new LightGbmMulticlassTrainer.Options(){NumberOfLeaves=2312,NumberOfIterations=621,MinimumExampleCountPerLeaf=27,LearningRate=0.27072042109609873,LabelColumnName=@"booking_status",FeatureColumnName=@"Features",Booster=new GradientBooster.Options(){SubsampleFraction=0.9999997766729865,FeatureFraction=0.9291873990295181,L1Regularization=1.4870571693887196E-09,L2Regularization=0.104523539641825},MaximumBinCountPerFeature=147}))      
+                                    .Append(mlContext.MulticlassClassification.Trainers.LightGbm(new LightGbmMulticlassTrainer.Options(){NumberOfLeaves=2590,NumberOfIterations=1135,MinimumExampleCountPerLeaf=20,LearningRate=0.5618817050285548,LabelColumnName=@"booking_status",FeatureColumnName=@"Features",Booster=new GradientBooster.Options(){SubsampleFraction=0.3523932237917193,FeatureFraction=0.99999999,L1Regularization=2E-10,L2Regularization=0.07658314492207861},MaximumBinCountPerFeature=307}))      
                                     .Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName:@"PredictedLabel",inputColumnName:@"PredictedLabel"));
 
             return pipeline;
         }
     }
- 
+ }

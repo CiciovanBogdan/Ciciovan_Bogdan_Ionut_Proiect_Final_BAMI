@@ -1,10 +1,8 @@
-﻿using Ciciovan_Bogdan_Ionut_HotelReservations.Controllers;
-using Ciciovan_Bogdan_Ionut_HotelReservations.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Ciciovan_Bogdan_Ionut_HotelReservations.Models;
 using Ciciovan_Bogdan_Ionut_HotelReservations.Services;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
+using Ciciovan_Bogdan_Ionut_HotelReservations.Data;
 
 namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
 {
@@ -19,22 +17,42 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
             _context = context;
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
-            ViewData["RoomTypes"] = new SelectList(new[] {
+            var defaultRequest = new PredictionRequest
+            {
+                NoOfAdults = 2,
+                NoOfChildren = 0,
+                IsRepeatedGuest = false,
+                NoPreviousCancellations = 0,
+                NoPreviousBookings = 0,
+                NoOfWeekendNights = 2,
+                NoOfWeekNights = 3,
+                LeadTime = 30,
+                AvgPricePerRoom = 100.00m,
+                NoOfSpecialRequests = 0,
+                RequiredCarParking = false,
+                ArrivalMonth = DateTime.Now.Month,
+                RoomTypeReserved = "Room_Type 1",
+                TypeOfMealPlan = "Not Selected",
+                MarketSegmentType = "Online"
+            };
+
+            ViewBag.RoomTypes = new SelectList(new[] {
                 "Room_Type 1", "Room_Type 2", "Room_Type 3", "Room_Type 4",
                 "Room_Type 5", "Room_Type 6", "Room_Type 7"
             });
 
-            ViewData["MealPlans"] = new SelectList(new[] {
+            ViewBag.MealPlans = new SelectList(new[] {
                 "Not Selected", "Meal Plan 1", "Meal Plan 2", "Meal Plan 3"
             });
 
-            ViewData["MarketSegments"] = new SelectList(new[] {
+            ViewBag.MarketSegments = new SelectList(new[] {
                 "Online", "Offline", "Corporate", "Aviation", "Complementary"
             });
 
-            return View();
+            return View(defaultRequest);
         }
 
         [HttpPost]
@@ -46,18 +64,18 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
                 ViewBag.Result = result;
             }
 
-            ViewData["RoomTypes"] = new SelectList(new[] {
+            ViewBag.RoomTypes = new SelectList(new[] {
                 "Room_Type 1", "Room_Type 2", "Room_Type 3", "Room_Type 4",
                 "Room_Type 5", "Room_Type 6", "Room_Type 7"
-            });
+            }, request.RoomTypeReserved);
 
-            ViewData["MealPlans"] = new SelectList(new[] {
+            ViewBag.MealPlans = new SelectList(new[] {
                 "Not Selected", "Meal Plan 1", "Meal Plan 2", "Meal Plan 3"
-            });
+            }, request.TypeOfMealPlan);
 
-            ViewData["MarketSegments"] = new SelectList(new[] {
+            ViewBag.MarketSegments = new SelectList(new[] {
                 "Online", "Offline", "Corporate", "Aviation", "Complementary"
-            });
+            }, request.MarketSegmentType);
 
             return View(request);
         }

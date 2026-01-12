@@ -20,14 +20,12 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label asp-for="NoOfAdults" class="form-label">Number of Adults</label>
-                            <input asp-for="NoOfAdults" class="form-control" type="number" min="1" max="10" value="2" />
-                            <span asp-validation-for="NoOfAdults" class="text-danger"></span>
+                            <label class="form-label">Number of Adults</label>
+                            <input asp-for="NoOfAdults" class="form-control" type="number" min="1" max="10" />
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label asp-for="NoOfChildren" class="form-label">Number of Children</label>
-                            <input asp-for="NoOfChildren" class="form-control" type="number" min="0" max="10" value="0" />
-                            <span asp-validation-for="NoOfChildren" class="text-danger"></span>
+                            <label class="form-label">Number of Children</label>
+                            <input asp-for="NoOfChildren" class="form-control" type="number" min="0" max="10" />
                         </div>
                     </div>
 
@@ -40,14 +38,12 @@
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label asp-for="NoPreviousCancellations" class="form-label">Previous Cancellations</label>
-                            <input asp-for="NoPreviousCancellations" class="form-control" type="number" min="0" value="0" />
-                            <span asp-validation-for="NoPreviousCancellations" class="text-danger"></span>
+                            <label class="form-label">Previous Cancellations</label>
+                            <input asp-for="NoPreviousCancellations" class="form-control" type="number" min="0" />
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label asp-for="NoPreviousBookings" class="form-label">Previous Bookings</label>
-                            <input asp-for="NoPreviousBookings" class="form-control" type="number" min="0" value="0" />
-                            <span asp-validation-for="NoPreviousBookings" class="text-danger"></span>
+                            <label class="form-label">Previous Bookings</label>
+                            <input asp-for="NoPreviousBookings" class="form-control" type="number" min="0" />
                         </div>
                     </div>
                 </div>
@@ -60,31 +56,27 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label asp-for="NoOfWeekendNights" class="form-label">Weekend Nights</label>
-                            <input asp-for="NoOfWeekendNights" class="form-control" type="number" min="0" max="30" value="2" />
-                            <span asp-validation-for="NoOfWeekendNights" class="text-danger"></span>
+                            <label class="form-label">Weekend Nights</label>
+                            <input asp-for="NoOfWeekendNights" class="form-control" type="number" min="0" max="30" />
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label asp-for="NoOfWeekNights" class="form-label">Week Nights</label>
-                            <input asp-for="NoOfWeekNights" class="form-control" type="number" min="0" max="30" value="3" />
-                            <span asp-validation-for="NoOfWeekNights" class="text-danger"></span>
+                            <label class="form-label">Week Nights</label>
+                            <input asp-for="NoOfWeekNights" class="form-control" type="number" min="0" max="30" />
                         </div>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="RoomTypeReserved" class="form-label">Room Type</label>
+                        <label class="form-label">Room Type</label>
                         <select asp-for="RoomTypeReserved" class="form-select" asp-items="ViewBag.RoomTypes">
                             <option value="">-- Select Room Type --</option>
                         </select>
-                        <span asp-validation-for="RoomTypeReserved" class="text-danger"></span>
                     </div>
 
                     <div class="mb-3">
-                        <label asp-for="TypeOfMealPlan" class="form-label">Meal Plan</label>
+                        <label class="form-label">Meal Plan</label>
                         <select asp-for="TypeOfMealPlan" class="form-select" asp-items="ViewBag.MealPlans">
                             <option value="">-- Select Meal Plan --</option>
                         </select>
-                        <span asp-validation-for="TypeOfMealPlan" class="text-danger"></span>
                     </div>
                 </div>
             </div>
@@ -96,30 +88,47 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label asp-for="LeadTime" class="form-label">Lead Time (days)</label>
-                            <input asp-for="LeadTime" class="form-control" type="number" min="0" max="365" value="30" />
-                            <span asp-validation-for="LeadTime" class="text-danger"></span>
+                            <label class="form-label">Lead Time (days)</label>
+                            <input asp-for="LeadTime" class="form-control" type="number" min="0" max="365" />
                             <small class="form-text text-muted">Days between booking and arrival</small>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label asp-for="AvgPricePerRoom" class="form-label">Avg Price Per Room</label>
-                            <input asp-for="AvgPricePerRoom" class="form-control" type="number" step="0.01" min="0" value="100.00" />
-                            <span asp-validation-for="AvgPricePerRoom" class="text-danger"></span>
+                            <label class="form-label">Avg Price Per Room</label>
+                            <input asp-for="AvgPricePerRoom" class="form-control" type="number" step="0.01" min="0" />
                         </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label asp-for="NoOfSpecialRequests" class="form-label">Special Requests</label>
-                            <input asp-for="NoOfSpecialRequests" class="form-control" type="number" min="0" max="10" value="0" />
-                            <span asp-validation-for="NoOfSpecialRequests" class="text-danger"></span>
+                            <label asp-for="ArrivalMonth" class="form-label">Arrival Month</label>
+                            <select asp-for="ArrivalMonth" class="form-select">
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">October</option>
+                                <option value="11">November</option>
+                                <option value="12">December</option>
+                            </select>
+                            <small class="form-text text-muted">Month of arrival (affects seasonality)</small>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Special Requests</label>
+                            <input asp-for="NoOfSpecialRequests" class="form-control" type="number" min="0" max="10" />
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label asp-for="MarketSegmentType" class="form-label">Market Segment</label>
+                            <label class="form-label">Market Segment</label>
                             <select asp-for="MarketSegmentType" class="form-select" asp-items="ViewBag.MarketSegments">
                                 <option value="">-- Select Segment --</option>
                             </select>
-                            <span asp-validation-for="MarketSegmentType" class="text-danger"></span>
                         </div>
                     </div>
 
@@ -144,14 +153,21 @@
         @if (ViewBag.Result != null)
         {
             var result = ViewBag.Result as Ciciovan_Bogdan_Ionut_HotelReservations.Models.PredictionResponse;
-            
+
+            var isHighRisk = result.RiskLevel.Contains("High");
+            var isMediumRisk = result.RiskLevel.Contains("Medium");
+            var isLowRisk = result.RiskLevel.Contains("Low") || result.RiskLevel.Contains("Very Low");
+
+            var headerColor = isHighRisk ? "bg-danger" : (isMediumRisk ? "bg-warning" : "bg-success");
+            var textColor = isHighRisk ? "text-danger" : (isMediumRisk ? "text-warning" : "text-success");
+
             <div class="card">
-                <div class="card-header @(result.PredictedLabel == "Canceled" ? "bg-danger" : "bg-success") text-white">
+                <div class="card-header @headerColor text-white">
                     <h4 class="mb-0">Prediction Result</h4>
                 </div>
                 <div class="card-body">
                     <div class="text-center mb-4">
-                        <h2 class="display-4 @(result.PredictedLabel == "Canceled" ? "text-danger" : "text-success")">
+                        <h2 class="display-4 @textColor">
                             @result.PredictedLabel
                         </h2>
                     </div>
@@ -159,20 +175,33 @@
                     <div class="mb-4">
                         <h5>Cancellation Probability</h5>
                         <div class="progress" style="height: 30px;">
-                            <div class="progress-bar @(result.Probability > 0.7 ? "bg-danger" : result.Probability > 0.4 ? "bg-warning" : "bg-success")" 
-                                 role="progressbar" 
-                                 style="width: @((result.Probability * 100).ToString("F0"))%"
-                                 aria-valuenow="@((result.Probability * 100).ToString("F0"))" 
-                                 aria-valuemin="0" 
+                            @{
+                                var percentage = (result.Probability * 100);
+                                var barColor = isHighRisk ? "bg-danger" : (isMediumRisk ? "bg-warning" : "bg-info");
+
+                                var displayWidth = percentage < 1 ? 5 : percentage;
+                            }
+
+                            <div class="progress-bar @barColor"
+                                 role="progressbar"
+                                 style="width: @(displayWidth.ToString("F0"))%; min-width: 50px;"
+                                 aria-valuenow="@(percentage.ToString("F0"))"
+                                 aria-valuemin="0"
                                  aria-valuemax="100">
-                                <strong>@((result.Probability * 100).ToString("F1"))%</strong>
+                                <strong>@(percentage.ToString("F2"))%</strong>
                             </div>
                         </div>
+                        <small class="text-muted">Probability that this booking will be canceled</small>
                     </div>
 
-                    <div class="alert @(result.RiskLevel == "High Risk" ? "alert-danger" : result.RiskLevel == "Medium Risk" ? "alert-warning" : "alert-success")" role="alert">
+                    @{
+                        var alertClass = isHighRisk ? "alert-danger" : (isMediumRisk ? "alert-warning" : "alert-success");
+                        var iconClass = isHighRisk ? "bi-exclamation-triangle-fill" : (isMediumRisk ? "bi-exclamation-circle-fill" : "bi-check-circle-fill");
+                    }
+
+                    <div class="alert @alertClass" role="alert">
                         <h5 class="alert-heading">
-                            <i class="bi @(result.RiskLevel == "High Risk" ? "bi-exclamation-triangle-fill" : result.RiskLevel == "Medium Risk" ? "bi-exclamation-circle-fill" : "bi-check-circle-fill")"></i>
+                            <i class="bi @iconClass"></i>
                             @result.RiskLevel
                         </h5>
                         <hr>
@@ -183,10 +212,14 @@
                         <div class="card-body">
                             <h6 class="card-title">Understanding the Results:</h6>
                             <ul class="mb-0">
-                                <li><strong>High Risk (&gt;70%):</strong> Strong likelihood of cancellation</li>
-                                <li><strong>Medium Risk (40-70%):</strong> Moderate cancellation risk</li>
-                                <li><strong>Low Risk (&lt;40%):</strong> Booking likely to proceed</li>
+                                <li><strong>High Risk (&gt;10%):</strong> Strong likelihood of cancellation</li>
+                                <li><strong>Medium Risk (3-10%):</strong> Moderate cancellation risk</li>
+                                <li><strong>Low Risk (&lt;3%):</strong> Booking likely to proceed</li>
                             </ul>
+                            <small class="text-muted mt-2 d-block">
+                                <i class="bi bi-info-circle"></i>
+                                Arrival month affects prediction due to seasonality patterns.
+                            </small>
                         </div>
                     </div>
                 </div>
@@ -199,10 +232,17 @@
                     <i class="bi bi-info-circle" style="font-size: 4rem; color: #0d6efd;"></i>
                     <h4 class="mt-3">Ready to Predict</h4>
                     <p class="text-muted">Fill in the booking details on the left and click "Predict Cancellation Risk" to see the AI-powered prediction.</p>
-                    
+
                     <div class="alert alert-info mt-4" role="alert">
                         <h6 class="alert-heading">How it works:</h6>
-                        <p class="mb-0 small">Our ML.NET model analyzes booking patterns from thousands of historical reservations to predict cancellation probability based on guest behavior, booking characteristics, and stay details.</p>
+                        <p class="mb-0 small">Our ML.NET model analyzes booking patterns from thousands of historical reservations to predict cancellation probability based on guest behavior, booking characteristics, stay details, and seasonality.</p>
+                    </div>
+
+                    <div class="card bg-light mt-3">
+                        <div class="card-body">
+                            <h6 class="card-title"><i class="bi bi-lightbulb"></i> Did you know?</h6>
+                            <p class="small mb-0">Arrival month significantly impacts cancellation risk. November typically shows higher cancellation rates due to high season competition, while January (off-season) shows lower rates as guests are more committed to their bookings.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -211,5 +251,7 @@
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
