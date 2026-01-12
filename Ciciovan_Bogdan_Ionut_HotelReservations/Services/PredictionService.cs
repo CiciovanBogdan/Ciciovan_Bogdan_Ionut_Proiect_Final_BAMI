@@ -17,11 +17,21 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Services
         {
             try
             {
-                var jsonContent = JsonSerializer.Serialize(request);
+                var jsonContent = JsonSerializer.Serialize(request, new JsonSerializerOptions
+                {
+                    PropertyNamingPolicy = null,
+                    WriteIndented = true
+                });
+
                 var httpContent = new StringContent(jsonContent, Encoding.UTF8, "application/json");
 
                 var response = await _httpClient.PostAsync("/predict", httpContent);
-                response.EnsureSuccessStatusCode();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    var errorContent = await response.Content.ReadAsStringAsync();
+                    throw new Exception($"API returned {response.StatusCode}: {errorContent}");
+                }
 
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var apiResponse = JsonSerializer.Deserialize<ApiPredictionResponse>(
@@ -29,8 +39,17 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Services
                     new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
                 );
 
-                var isCanceled = apiResponse?.PredictedLabel?.ToLower() == "canceled";
-                var probability = apiResponse?.Score ?? 0;
+                var isCanceled = apiResponse?.PredictedLabel?.Contains("Canceled", StringComparison.OrdinalIgnoreCase) ?? false;
+
+                float probability;
+                if (apiResponse?.Score != null && apiResponse.Score.Length >= 2)
+                {
+                    probability = apiResponse.Score[1];
+                }
+                else
+                {
+                    probability = 0;
+                }
 
                 string riskLevel;
                 string recommendation;
@@ -74,7 +93,7 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Services
         private class ApiPredictionResponse
         {
             public string PredictedLabel { get; set; }
-            public float Score { get; set; }
+            public float[] Score { get; set; }
         }
     }
 }
