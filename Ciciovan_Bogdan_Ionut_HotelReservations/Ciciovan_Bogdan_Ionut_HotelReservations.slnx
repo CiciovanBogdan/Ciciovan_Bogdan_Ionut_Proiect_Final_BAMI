@@ -1,4 +1,5 @@
 <Solution>
+  <Project Path="../BookingCalculationsGrpcService/BookingCalculationsGrpcService.csproj" Id="d9e4fb9c-ad63-4edd-9a2f-0eff9004a76a" />
   <Project Path="../HotelReservations_ML_API/HotelReservations_ML_API.csproj" />
   <Project Path="Ciciovan_Bogdan_Ionut_HotelReservations.csproj" />
 </Solution>

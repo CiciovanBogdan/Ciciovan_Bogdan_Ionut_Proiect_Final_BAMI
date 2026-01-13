@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+option csharp_namespace = "BookingCalculationsGrpcService";
+
+package booking;
+
+service BookingCalculations {
+  rpc CalculateTotalCost (CostRequest) returns (CostReply);
+  
+  rpc GetBookingStats (StatsRequest) returns (StatsReply);
+  
+  rpc GetAllBookings (BookingListRequest) returns (BookingListReply);
+}
+
+message CostRequest {
+  int32 noOfWeekendNights = 1;
+  int32 noOfWeekNights = 2;
+  float avgPricePerRoom = 3;
+  string mealPlan = 4;
+  int32 noOfSpecialRequests = 5;
+  bool requiredCarParking = 6;
+}
+
+message CostReply {
+  float totalCost = 1;
+  float accommodationCost = 2;
+  float mealCost = 3;
+  float extrasCost = 4;
+  string breakdown = 5;
+}
+
+message StatsRequest {
+  
+}
+
+message StatsReply {
+  int32 totalBookings = 1;
+  int32 notCanceledBookings = 2;
+  int32 canceledBookings = 3;
+  float cancellationRate = 4;
+  float averagePrice = 5;
+  int32 totalGuests = 6;
+}
+
+message BookingListRequest {
+  bool includeCanceled = 1;
+  int32 maxResults = 2;
+}
+
+message BookingListReply {
+  repeated BookingSummary bookings = 1;
+  int32 totalCount = 2;
+}
+
+message BookingSummary {
+  int32 bookingId = 1;
+  int32 noOfAdults = 2;
+  int32 noOfChildren = 3;
+  int32 noOfWeekendNights = 4;
+  int32 noOfWeekNights = 5;
+  string mealPlan = 6;
+  float avgPricePerRoom = 7;
+  string bookingStatus = 8;
+}

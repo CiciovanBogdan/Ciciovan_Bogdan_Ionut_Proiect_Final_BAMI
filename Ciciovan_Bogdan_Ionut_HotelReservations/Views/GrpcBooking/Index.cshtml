@@ -1,0 +1,93 @@
+﻿@{
+    ViewData["Title"] = "Booking Calculations (gRPC)";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4">
+        <i class="bi bi-calculator"></i> Booking Calculations Service
+        <span class="badge bg-info text-dark">gRPC</span>
+    </h2>
+
+    <div class="alert alert-info">
+        <i class="bi bi-info-circle"></i>
+        <strong>About this service:</strong> This page demonstrates gRPC integration for booking calculations and statistics.
+    </div>
+
+    <div class="row g-4">
+        <!-- Calculate Cost Card -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-currency-dollar" style="font-size: 3rem; color: #0d6efd;"></i>
+                    </div>
+                    <h5 class="card-title">Calculate Total Cost</h5>
+                    <p class="card-text">
+                        Calculate the total cost of a booking including accommodation, meals, and extras.
+                    </p>
+                    <a asp-action="CalculateCost" class="btn btn-primary">
+                        <i class="bi bi-calculator"></i> Calculate Cost
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics Card -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-graph-up-arrow" style="font-size: 3rem; color: #198754;"></i>
+                    </div>
+                    <h5 class="card-title">Booking Statistics</h5>
+                    <p class="card-text">
+                        View overall booking statistics including cancellation rates and average prices.
+                    </p>
+                    <a asp-action="Statistics" class="btn btn-success">
+                        <i class="bi bi-bar-chart"></i> View Statistics
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bookings List Card -->
+        <div class="col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body text-center">
+                    <div class="mb-3">
+                        <i class="bi bi-list-ul" style="font-size: 3rem; color: #6c757d;"></i>
+                    </div>
+                    <h5 class="card-title">Bookings List</h5>
+                    <p class="card-text">
+                        Browse all bookings with filtering options for canceled and active reservations.
+                    </p>
+                    <a asp-action="BookingsList" class="btn btn-secondary">
+                        <i class="bi bi-list"></i> View Bookings
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Technical Info -->
+    <div class="card mt-4 border-secondary">
+        <div class="card-header bg-secondary text-white">
+            <i class="bi bi-gear"></i> Technical Information
+        </div>
+        <div class="card-body">
+            <dl class="row mb-0">
+                <dt class="col-sm-3">Service Type:</dt>
+                <dd class="col-sm-9">gRPC (Google Remote Procedure Call)</dd>
+
+                <dt class="col-sm-3">Protocol:</dt>
+                <dd class="col-sm-9">HTTP/2</dd>
+
+                <dt class="col-sm-3">Communication:</dt>
+                <dd class="col-sm-9">Binary serialization with Protocol Buffers</dd>
+
+                <dt class="col-sm-3">Operations:</dt>
+                <dd class="col-sm-9">Cost Calculation, Statistics Retrieval, Bookings List</dd>
+            </dl>
+        </div>
+    </div>
+</div>

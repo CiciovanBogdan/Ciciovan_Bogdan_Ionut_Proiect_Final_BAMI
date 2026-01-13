@@ -1,0 +1,139 @@
+﻿@model BookingCalculationsGrpcService.CostRequest
+
+@{
+    ViewData["Title"] = "Calculate Total Cost";
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <h2 class="mb-4">
+                <i class="bi bi-calculator"></i> Calculate Total Cost
+                <span class="badge bg-info">gRPC</span>
+            </h2>
+
+            <div class="card shadow">
+                <div class="card-body">
+                    <form asp-action="CalculateCost" method="post">
+
+                        <!-- Stay Details -->
+                        <div class="card mb-3">
+                            <div class="card-header bg-primary text-white">
+                                <i class="bi bi-calendar3"></i> Stay Details
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Weekend Nights</label>
+                                        <input type="number" asp-for="NoOfWeekendNights" class="form-control"
+                                               value="2" min="0" max="30" required />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Week Nights</label>
+                                        <input type="number" asp-for="NoOfWeekNights" class="form-control"
+                                               value="3" min="0" max="30" required />
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="form-label">Average Price Per Room ($)</label>
+                                    <input type="number" step="0.01" asp-for="AvgPricePerRoom" class="form-control"
+                                           value="100" min="0" required />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Meal Plan -->
+                        <div class="card mb-3">
+                            <div class="card-header bg-success text-white">
+                                <i class="bi bi-cup-hot"></i> Meal Plan
+                            </div>
+                            <div class="card-body">
+                                <select asp-for="MealPlan" class="form-select">
+                                    <option value="Not Selected">Not Selected ($0/night)</option>
+                                    <option value="Meal Plan 1">Meal Plan 1 ($15/night)</option>
+                                    <option value="Meal Plan 2">Meal Plan 2 ($25/night)</option>
+                                    <option value="Meal Plan 3">Meal Plan 3 ($35/night)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Extras -->
+                        <div class="card mb-3">
+                            <div class="card-header bg-warning">
+                                <i class="bi bi-plus-circle"></i> Extras
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Special Requests ($10 each)</label>
+                                    <input type="number" asp-for="NoOfSpecialRequests" class="form-control"
+                                           value="0" min="0" max="10" />
+                                </div>
+
+                                <div class="form-check">
+                                    <input type="checkbox" asp-for="RequiredCarParking" class="form-check-input" />
+                                    <label class="form-check-label">
+                                        Required Car Parking ($50 flat)
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-calculator"></i> Calculate Total Cost
+                            </button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">
+                                <i class="bi bi-arrow-left"></i> Back to Menu
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            @if (ViewBag.Result != null)
+            {
+                var result = ViewBag.Result as BookingCalculationsGrpcService.CostReply;
+
+                <div class="card mt-4 shadow border-success">
+                    <div class="card-header bg-success text-white">
+                        <i class="bi bi-check-circle"></i> Cost Calculation Result
+                    </div>
+                    <div class="card-body">
+                        <div class="row text-center mb-3">
+                            <div class="col-md-3">
+                                <h6 class="text-muted">Accommodation</h6>
+                                <h4 class="text-primary">$@result.AccommodationCost.ToString("F2")</h4>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="text-muted">Meals</h6>
+                                <h4 class="text-success">$@result.MealCost.ToString("F2")</h4>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="text-muted">Extras</h6>
+                                <h4 class="text-warning">$@result.ExtrasCost.ToString("F2")</h4>
+                            </div>
+                            <div class="col-md-3">
+                                <h6 class="text-muted">TOTAL</h6>
+                                <h3 class="text-danger fw-bold">$@result.TotalCost.ToString("F2")</h3>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <h6 class="mb-2">Breakdown:</h6>
+                        <pre class="bg-light p-3 rounded">@result.Breakdown</pre>
+                    </div>
+                </div>
+            }
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger mt-4">
+                    <i class="bi bi-exclamation-triangle"></i>
+                    @ViewBag.Error
+                </div>
+            }
+        </div>
+    </div>
+</div>
