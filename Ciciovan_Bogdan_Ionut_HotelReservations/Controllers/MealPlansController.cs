@@ -20,9 +20,43 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
         }
 
         // GET: MealPlans
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, decimal? minPrice, decimal? maxPrice, string sortOrder)
         {
-            return View(await _context.MealPlans.ToListAsync());
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentMinPrice"] = minPrice;
+            ViewData["CurrentMaxPrice"] = maxPrice;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["PriceSortParm"] = sortOrder == "price" ? "price_desc" : "price";
+
+            var mealPlans = _context.MealPlans.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                mealPlans = mealPlans.Where(m =>
+                    m.PlanName.ToLower().Contains(searchString)
+                    || (m.Description != null && m.Description.ToLower().Contains(searchString)));
+            }
+
+            if (minPrice.HasValue)
+            {
+                mealPlans = mealPlans.Where(m => m.PricePerPerson >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                mealPlans = mealPlans.Where(m => m.PricePerPerson <= maxPrice.Value);
+            }
+
+            mealPlans = sortOrder switch
+            {
+                "name_desc" => mealPlans.OrderByDescending(m => m.PlanName),
+                "price" => mealPlans.OrderBy(m => m.PricePerPerson),
+                "price_desc" => mealPlans.OrderByDescending(m => m.PricePerPerson),
+                _ => mealPlans.OrderBy(m => m.PlanName),
+            };
+
+            return View(await mealPlans.ToListAsync());
         }
 
         // GET: MealPlans/Details/5

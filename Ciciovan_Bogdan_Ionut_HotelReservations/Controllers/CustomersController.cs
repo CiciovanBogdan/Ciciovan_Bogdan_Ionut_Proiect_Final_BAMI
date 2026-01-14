@@ -20,9 +20,36 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
         }
 
         // GET: Customers
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, string sortOrder)
         {
-            return View(await _context.Customers.ToListAsync());
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["FirstNameSortParm"] = sortOrder == "firstname" ? "firstname_desc" : "firstname";
+            ViewData["EmailSortParm"] = sortOrder == "email" ? "email_desc" : "email";
+
+            var customers = _context.Customers.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                customers = customers.Where(c =>
+                    c.FirstName.ToLower().Contains(searchString)
+                    || c.LastName.ToLower().Contains(searchString)
+                    || (c.FirstName + " " + c.LastName).ToLower().Contains(searchString)
+                    || c.Email.ToLower().Contains(searchString));
+            }
+
+            customers = sortOrder switch
+            {
+                "name_desc" => customers.OrderByDescending(c => c.LastName),
+                "firstname" => customers.OrderBy(c => c.FirstName),
+                "firstname_desc" => customers.OrderByDescending(c => c.FirstName),
+                "email" => customers.OrderBy(c => c.Email),
+                "email_desc" => customers.OrderByDescending(c => c.Email),
+                _ => customers.OrderBy(c => c.LastName),
+            };
+
+            return View(await customers.ToListAsync());
         }
 
         // GET: Customers/Details/5
@@ -54,10 +81,16 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("CustomerId,FirstName,LastName,Email,PhoneNumber,IsRepeatedGuest,TotalPreviousCancellations,TotalPreviousBookings,CreatedDate")] Customer customer)
+        public async Task<IActionResult> Create([Bind("CustomerId,FirstName,LastName,Email,PhoneNumber,IsRepeatedGuest,TotalPreviousCancellations,TotalPreviousBookings")] Customer customer)
         {
+            // Remove CreatedDate from ModelState validation
+            ModelState.Remove("CreatedDate");
+
             if (ModelState.IsValid)
             {
+                // Set CreatedDate automatically
+                customer.CreatedDate = DateTime.Now;
+
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -86,17 +119,27 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,FirstName,LastName,Email,PhoneNumber,IsRepeatedGuest,TotalPreviousCancellations,TotalPreviousBookings,CreatedDate")] Customer customer)
+        public async Task<IActionResult> Edit(int id, [Bind("CustomerId,FirstName,LastName,Email,PhoneNumber,IsRepeatedGuest,TotalPreviousCancellations,TotalPreviousBookings")] Customer customer)
         {
             if (id != customer.CustomerId)
             {
                 return NotFound();
             }
 
+            // Remove CreatedDate from ModelState validation
+            ModelState.Remove("CreatedDate");
+
             if (ModelState.IsValid)
             {
                 try
                 {
+                    // Retrieve original customer to preserve CreatedDate
+                    var existingCustomer = await _context.Customers.AsNoTracking().FirstOrDefaultAsync(c => c.CustomerId == id);
+                    if (existingCustomer != null)
+                    {
+                        customer.CreatedDate = existingCustomer.CreatedDate;
+                    }
+
                     _context.Update(customer);
                     await _context.SaveChangesAsync();
                 }

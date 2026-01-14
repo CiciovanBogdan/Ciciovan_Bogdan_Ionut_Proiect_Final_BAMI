@@ -19,7 +19,8 @@
                 <div class="col-md-6">
                     <div class="form-check form-switch">
                         <input class="form-check-input" type="checkbox" name="includeCanceled"
-                               id="includeCanceled" @(ViewBag.IncludeCanceled ? "checked" : "") />
+                               id="includeCanceled" value="true"
+                               @(ViewBag.IncludeCanceled == true ? "checked" : "") />
                         <label class="form-check-label" for="includeCanceled">
                             Include Canceled Bookings
                         </label>

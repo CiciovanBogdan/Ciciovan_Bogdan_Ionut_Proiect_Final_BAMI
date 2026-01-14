@@ -20,9 +20,59 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
         }
 
         // GET: RoomTypes
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString, int? capacityFilter, decimal? minPrice, decimal? maxPrice, string sortOrder)
         {
-            return View(await _context.RoomTypes.ToListAsync());
+            ViewData["CurrentFilter"] = searchString;
+            ViewData["CurrentCapacity"] = capacityFilter;
+            ViewData["CurrentMinPrice"] = minPrice;
+            ViewData["CurrentMaxPrice"] = maxPrice;
+            ViewData["NameSortParm"] = String.IsNullOrEmpty(sortOrder) ? "name_desc" : "";
+            ViewData["CapacitySortParm"] = sortOrder == "capacity" ? "capacity_desc" : "capacity";
+            ViewData["PriceSortParm"] = sortOrder == "price" ? "price_desc" : "price";
+
+            var roomTypes = _context.RoomTypes.AsQueryable();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                roomTypes = roomTypes.Where(r =>
+                    r.RoomTypeName.ToLower().Contains(searchString)
+                    || (r.Description != null && r.Description.ToLower().Contains(searchString)));
+            }
+
+            if (capacityFilter.HasValue)
+            {
+                roomTypes = roomTypes.Where(r => r.MaxOccupancy == capacityFilter.Value);
+            }
+
+            if (minPrice.HasValue)
+            {
+                roomTypes = roomTypes.Where(r => r.BasePrice >= minPrice.Value);
+            }
+
+            if (maxPrice.HasValue)
+            {
+                roomTypes = roomTypes.Where(r => r.BasePrice <= maxPrice.Value);
+            }
+
+            roomTypes = sortOrder switch
+            {
+                "name_desc" => roomTypes.OrderByDescending(r => r.RoomTypeName),
+                "capacity" => roomTypes.OrderBy(r => r.MaxOccupancy),
+                "capacity_desc" => roomTypes.OrderByDescending(r => r.MaxOccupancy),
+                "price" => roomTypes.OrderBy(r => r.BasePrice),
+                "price_desc" => roomTypes.OrderByDescending(r => r.BasePrice),
+                _ => roomTypes.OrderBy(r => r.RoomTypeName),
+            };
+
+            var capacities = await _context.RoomTypes
+                .Select(r => r.MaxOccupancy)
+                .Distinct()
+                .OrderBy(c => c)
+                .ToListAsync();
+            ViewBag.CapacityList = capacities;
+
+            return View(await roomTypes.ToListAsync());
         }
 
         // GET: RoomTypes/Details/5

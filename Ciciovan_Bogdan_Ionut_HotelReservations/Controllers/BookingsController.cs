@@ -34,10 +34,13 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                bookings = bookings.Where(b => b.BookingCode.Contains(searchString)
-                                            || b.Customer.FirstName.Contains(searchString)
-                                            || b.Customer.LastName.Contains(searchString)
-                                            || b.Customer.Email.Contains(searchString));
+                searchString = searchString.ToLower();
+                bookings = bookings.Where(b =>
+                    b.BookingCode.ToLower().Contains(searchString)
+                    || b.Customer.FirstName.ToLower().Contains(searchString)
+                    || b.Customer.LastName.ToLower().Contains(searchString)
+                    || (b.Customer.FirstName + " " + b.Customer.LastName).ToLower().Contains(searchString)
+                    || b.Customer.Email.ToLower().Contains(searchString));
             }
 
             if (!String.IsNullOrEmpty(statusFilter))
@@ -121,6 +124,23 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
                 _context.Add(booking);
                 await _context.SaveChangesAsync();
 
+                var customer = await _context.Customers.FindAsync(booking.CustomerId);
+                if (customer != null)
+                {
+                    if (booking.BookingStatus == "Completed")
+                    {
+                        customer.TotalPreviousBookings++;
+                    }
+                    else if (booking.BookingStatus == "Canceled")
+                    {
+                        customer.TotalPreviousCancellations++;
+                    }
+
+                    customer.IsRepeatedGuest = customer.TotalPreviousBookings > 0 || customer.TotalPreviousCancellations > 0;
+
+                    await _context.SaveChangesAsync();
+                }
+
                 var history = new BookingHistory
                 {
                     BookingId = booking.BookingId,
@@ -192,6 +212,32 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
 
                     if (oldBooking.BookingStatus != booking.BookingStatus)
                     {
+                        var customer = await _context.Customers.FindAsync(booking.CustomerId);
+                        if (customer != null)
+                        {
+                            if (oldBooking.BookingStatus == "Completed")
+                            {
+                                customer.TotalPreviousBookings--;
+                            }
+                            else if (oldBooking.BookingStatus == "Canceled")
+                            {
+                                customer.TotalPreviousCancellations--;
+                            }
+
+                            if (booking.BookingStatus == "Completed")
+                            {
+                                customer.TotalPreviousBookings++;
+                            }
+                            else if (booking.BookingStatus == "Canceled")
+                            {
+                                customer.TotalPreviousCancellations++;
+                            }
+
+                            customer.IsRepeatedGuest = customer.TotalPreviousBookings > 0 || customer.TotalPreviousCancellations > 0;
+
+                            await _context.SaveChangesAsync();
+                        }
+
                         var history = new BookingHistory
                         {
                             BookingId = booking.BookingId,
