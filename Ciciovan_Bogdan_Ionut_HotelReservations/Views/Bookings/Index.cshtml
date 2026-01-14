@@ -81,7 +81,9 @@
                     <td>@(item.NoOfWeekendNights + item.NoOfWeekNights)</td>
                     <td>@item.NoOfAdults A, @item.NoOfChildren C</td>
                     <td>@Html.DisplayFor(modelItem => item.AvgPricePerRoom)</td>
-                    <td>@item.TotalPrice.ToString("C")</td>
+                    <td>
+                        <strong class="text-success">$@item.TotalPrice.ToString("N2")</strong>
+                    </td>
                     <td>
                         @if (item.BookingStatus == "Confirmed")
                         {

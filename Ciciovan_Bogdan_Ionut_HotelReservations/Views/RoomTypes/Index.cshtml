@@ -21,7 +21,6 @@
                     var currentCapacity = ViewData["CurrentCapacity"] as int?;
                 }
                 <div class="row g-3">
-                    <!-- Search Box -->
                     <div class="col-md-4">
                         <input type="text"
                                name="searchString"
@@ -30,7 +29,6 @@
                                placeholder="Search by room type..." />
                     </div>
 
-                    <!-- Capacity Filter -->
                     <div class="col-md-2">
                         <select name="capacityFilter" class="form-select">
                             <option value="">All Capacities</option>
@@ -44,7 +42,6 @@
                         </select>
                     </div>
 
-                    <!-- Min Price -->
                     <div class="col-md-2">
                         <input type="number"
                                name="minPrice"
@@ -55,7 +52,6 @@
                                min="0" />
                     </div>
 
-                    <!-- Max Price -->
                     <div class="col-md-2">
                         <input type="number"
                                name="maxPrice"
@@ -66,14 +62,12 @@
                                min="0" />
                     </div>
 
-                    <!-- Filter Button -->
                     <div class="col-md-1">
                         <button type="submit" class="btn btn-success w-100">
                             <i class="bi bi-search"></i> Filter
                         </button>
                     </div>
 
-                    <!-- Clear Button -->
                     <div class="col-md-1">
                         <a asp-action="Index" class="btn btn-secondary w-100">
                             <i class="bi bi-x-circle"></i> Clear

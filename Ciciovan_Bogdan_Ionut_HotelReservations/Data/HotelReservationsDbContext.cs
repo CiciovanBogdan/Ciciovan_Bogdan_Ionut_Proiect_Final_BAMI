@@ -122,8 +122,8 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Data
                     Email = "jane.smith@example.com",
                     PhoneNumber = "+40723456789",
                     IsRepeatedGuest = true,
-                    TotalPreviousCancellations = 1,
-                    TotalPreviousBookings = 5,
+                    TotalPreviousCancellations = 0,
+                    TotalPreviousBookings = 0,
                     CreatedDate = new DateTime(2025, 6, 15, 14, 30, 0)
                 }
             );

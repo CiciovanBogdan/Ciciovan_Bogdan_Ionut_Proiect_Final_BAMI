@@ -85,6 +85,7 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
                 .Include(b => b.Customer)
                 .Include(b => b.MealPlan)
                 .Include(b => b.RoomType)
+                .Include(b => b.BookingHistories)
                 .FirstOrDefaultAsync(m => m.BookingId == id);
 
             if (booking == null)

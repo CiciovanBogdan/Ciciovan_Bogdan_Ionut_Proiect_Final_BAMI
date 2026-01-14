@@ -67,10 +67,46 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Models
         [DataType(DataType.Currency)]
         public decimal AvgPricePerRoom { get; set; }
 
+        [Display(Name = "Total nopti")]
+        [NotMapped]
+        public int TotalNights => NoOfWeekendNights + NoOfWeekNights;
+
+        [Display(Name = "Total oaspeti")]
+        [NotMapped]
+        public int TotalGuests => NoOfAdults + NoOfChildren;
+
+        [Display(Name = "Pret camera (total)")]
+        [DataType(DataType.Currency)]
+        [NotMapped]
+        public decimal RoomCost => AvgPricePerRoom * TotalNights;
+
+        [Display(Name = "Pret mese (total)")]
+        [DataType(DataType.Currency)]
+        [NotMapped]
+        public decimal MealCost
+        {
+            get
+            {
+                if (MealPlan == null || !MealPlanId.HasValue)
+                    return 0;
+                return MealPlan.PricePerPerson * TotalGuests * TotalNights;
+            }
+        }
+
+        [Display(Name = "Cost cerinte speciale")]
+        [DataType(DataType.Currency)]
+        [NotMapped]
+        public decimal SpecialRequestsCost => NoOfSpecialRequests * 10m;
+
+        [Display(Name = "Cost parcare")]
+        [DataType(DataType.Currency)]
+        [NotMapped]
+        public decimal ParkingCost => RequiredCarParking ? 50m : 0m;
+
         [Display(Name = "Pret total")]
         [DataType(DataType.Currency)]
         [NotMapped]
-        public decimal TotalPrice => AvgPricePerRoom * (NoOfWeekendNights + NoOfWeekNights);
+        public decimal TotalPrice => RoomCost + MealCost + SpecialRequestsCost + ParkingCost;
 
         [Range(0, 365)]
         [Display(Name = "Zile pana la sosire")]

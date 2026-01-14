@@ -126,14 +126,12 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
                 return NotFound();
             }
 
-            // Remove CreatedDate from ModelState validation
             ModelState.Remove("CreatedDate");
 
             if (ModelState.IsValid)
             {
                 try
                 {
-                    // Retrieve original customer to preserve CreatedDate
                     var existingCustomer = await _context.Customers.AsNoTracking().FirstOrDefaultAsync(c => c.CustomerId == id);
                     if (existingCustomer != null)
                     {
