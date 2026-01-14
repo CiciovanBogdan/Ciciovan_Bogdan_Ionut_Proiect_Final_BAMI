@@ -309,6 +309,86 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+        public async Task<IActionResult> Dashboard(DateTime? fromDate, DateTime? toDate)
+        {
+            var query = _context.Bookings
+                .Include(b => b.RoomType)
+                .Include(b => b.MealPlan)
+                .Include(b => b.Customer)
+                .AsQueryable();
+
+            if (fromDate.HasValue)
+                query = query.Where(b => b.CreatedDate.Date >= fromDate.Value.Date);
+            if (toDate.HasValue)
+                query = query.Where(b => b.CreatedDate.Date <= toDate.Value.Date);
+
+            var bookings = await query.ToListAsync();
+
+            var totalBookings = bookings.Count;
+            var activeBookings = bookings.Count(b => b.BookingStatus == "Confirmed" || b.BookingStatus == "Pending");
+            var canceledBookings = bookings.Count(b => b.BookingStatus == "Canceled");
+            var completedBookings = bookings.Count(b => b.BookingStatus == "Completed");
+            var totalRevenue = bookings.Sum(b => b.TotalPrice);
+            var averageValue = totalBookings > 0 ? totalRevenue / totalBookings : 0;
+
+            var statusColors = new Dictionary<string, string>
+            {
+                { "Confirmed", "#28a745" },
+                { "Pending", "#ffc107" },
+                { "Canceled", "#dc3545" },
+                { "Completed", "#17a2b8" }
+            };
+
+            var statusStats = bookings
+                .GroupBy(b => b.BookingStatus)
+                .Select(g => new StatusStat
+                {
+                    Status = g.Key,
+                    Count = g.Count(),
+                    Color = statusColors.ContainsKey(g.Key) ? statusColors[g.Key] : "#6c757d"
+                })
+                .OrderByDescending(s => s.Count)
+                .ToList();
+
+            var roomTypeStats = bookings
+                .GroupBy(b => b.RoomType.RoomTypeName)
+                .Select(g => new RoomTypeStat
+                {
+                    RoomTypeName = g.Key,
+                    TotalRevenue = g.Sum(b => b.TotalPrice),
+                    Count = g.Count()
+                })
+                .OrderByDescending(r => r.TotalRevenue)
+                .ToList();
+
+            var monthlyStats = bookings
+                .GroupBy(b => new { b.CreatedDate.Year, b.CreatedDate.Month })
+                .Select(g => new MonthStat
+                {
+                    Month = $"{g.Key.Month}/{g.Key.Year}",
+                    Count = g.Count()
+                })
+                .OrderBy(m => m.Month)
+                .ToList();
+
+            var viewModel = new DashboardViewModel
+            {
+                TotalBookings = totalBookings,
+                ActiveBookings = activeBookings,
+                CanceledBookings = canceledBookings,
+                CompletedBookings = completedBookings,
+                TotalRevenue = totalRevenue,
+                AverageBookingValue = averageValue,
+                StatusStats = statusStats,
+                RoomTypeStats = roomTypeStats,
+                MonthlyStats = monthlyStats,
+                FromDate = fromDate,
+                ToDate = toDate
+            };
+
+            return View(viewModel);
+        }
+
         private bool BookingExists(int id)
         {
             return _context.Bookings.Any(e => e.BookingId == id);

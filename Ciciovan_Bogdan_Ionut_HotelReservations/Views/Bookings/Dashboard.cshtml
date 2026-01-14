@@ -1,0 +1,328 @@
+﻿@model Ciciovan_Bogdan_Ionut_HotelReservations.Models.DashboardViewModel
+@using System.Text.Json
+
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="bi bi-speedometer2"></i> Booking Dashboard
+        </h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to Bookings
+        </a>
+    </div>
+
+    <!-- Date Filter -->
+    <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+            <form method="get" asp-action="Dashboard" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">
+                        <i class="bi bi-calendar"></i> From Date
+                    </label>
+                    <input type="date" name="fromDate" class="form-control"
+                           value="@(Model.FromDate?.ToString("yyyy-MM-dd") ?? "")" />
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">
+                        <i class="bi bi-calendar"></i> To Date
+                    </label>
+                    <input type="date" name="toDate" class="form-control"
+                           value="@(Model.ToDate?.ToString("yyyy-MM-dd") ?? "")" />
+                </div>
+                <div class="col-md-2 align-self-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-funnel"></i> Filter
+                    </button>
+                </div>
+                <div class="col-md-2 align-self-end">
+                    <a asp-action="Dashboard" class="btn btn-secondary w-100">
+                        <i class="bi bi-x-circle"></i> Clear
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Overview Cards -->
+    <div class="row mb-4">
+        <!-- Total Bookings -->
+        <div class="col-md-3">
+            <div class="card text-bg-primary mb-3 shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-subtitle mb-2 text-white-50">Total Bookings</h6>
+                            <h2 class="card-title mb-0">@Model.TotalBookings</h2>
+                        </div>
+                        <i class="bi bi-calendar-check" style="font-size: 3rem; opacity: 0.3;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Bookings -->
+        <div class="col-md-3">
+            <div class="card text-bg-success mb-3 shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-subtitle mb-2 text-white-50">Active Bookings</h6>
+                            <h2 class="card-title mb-0">@Model.ActiveBookings</h2>
+                        </div>
+                        <i class="bi bi-check-circle" style="font-size: 3rem; opacity: 0.3;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completed Bookings -->
+        <div class="col-md-3">
+            <div class="card text-bg-info mb-3 shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-subtitle mb-2 text-white-50">Completed</h6>
+                            <h2 class="card-title mb-0">@Model.CompletedBookings</h2>
+                        </div>
+                        <i class="bi bi-clipboard-check" style="font-size: 3rem; opacity: 0.3;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Canceled Bookings -->
+        <div class="col-md-3">
+            <div class="card text-bg-danger mb-3 shadow">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="card-subtitle mb-2 text-white-50">Canceled</h6>
+                            <h2 class="card-title mb-0">@Model.CanceledBookings</h2>
+                        </div>
+                        <i class="bi bi-x-circle" style="font-size: 3rem; opacity: 0.3;"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Revenue Cards -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="card text-bg-dark mb-3 shadow">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-white-50">Total Revenue</h6>
+                    <h2 class="card-title mb-0 text-success">
+                        $@Model.TotalRevenue.ToString("N2")
+                    </h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card text-bg-dark mb-3 shadow">
+                <div class="card-body">
+                    <h6 class="card-subtitle mb-2 text-white-50">Average Booking Value</h6>
+                    <h2 class="card-title mb-0 text-warning">
+                        $@Model.AverageBookingValue.ToString("N2")
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div class="row mb-4">
+        <!-- Status Distribution Chart -->
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-pie-chart"></i> Booking Status Distribution
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="statusChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Revenue by Room Type Chart -->
+        <div class="col-md-6">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-bar-chart"></i> Revenue by Room Type
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="revenueChart" height="250"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Monthly Bookings Chart -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-graph-up"></i> Bookings Over Time
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="monthlyChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Statistics Table -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card shadow">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">
+                        <i class="bi bi-table"></i> Room Type Statistics
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Room Type</th>
+                                <th>Number of Bookings</th>
+                                <th>Total Revenue</th>
+                                <th>Average per Booking</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var stat in Model.RoomTypeStats)
+                            {
+                                <tr>
+                                    <td><strong>@stat.RoomTypeName</strong></td>
+                                    <td>
+                                        <span class="badge bg-primary">@stat.Count</span>
+                                    </td>
+                                    <td class="text-success">
+                                        <strong>$@stat.TotalRevenue.ToString("N2")</strong>
+                                    </td>
+                                    <td>
+                                        $@((stat.Count > 0 ? stat.TotalRevenue / stat.Count : 0).ToString("N2"))
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Chart.js from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        const statusLabels = @Html.Raw(JsonSerializer.Serialize(Model.StatusStats.Select(s => s.Status)));
+        const statusData = @Html.Raw(JsonSerializer.Serialize(Model.StatusStats.Select(s => s.Count)));
+        const statusColors = @Html.Raw(JsonSerializer.Serialize(Model.StatusStats.Select(s => s.Color)));
+
+        const roomLabels = @Html.Raw(JsonSerializer.Serialize(Model.RoomTypeStats.Select(r => r.RoomTypeName)));
+        const revenueData = @Html.Raw(JsonSerializer.Serialize(Model.RoomTypeStats.Select(r => r.TotalRevenue)));
+
+        const monthLabels = @Html.Raw(JsonSerializer.Serialize(Model.MonthlyStats.Select(m => m.Month)));
+        const monthData = @Html.Raw(JsonSerializer.Serialize(Model.MonthlyStats.Select(m => m.Count)));
+
+        const statusCtx = document.getElementById('statusChart').getContext('2d');
+        new Chart(statusCtx, {
+            type: 'pie',
+            data: {
+                labels: statusLabels,
+                datasets: [{
+                    data: statusData,
+                    backgroundColor: statusColors,
+                    borderWidth: 2,
+                    borderColor: '#fff'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            }
+        });
+
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        new Chart(revenueCtx, {
+            type: 'bar',
+            data: {
+                labels: roomLabels,
+                datasets: [{
+                    label: 'Total Revenue ($)',
+                    data: revenueData,
+                    backgroundColor: 'rgba(40, 167, 69, 0.7)',
+                    borderColor: 'rgba(40, 167, 69, 1)',
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) {
+                                return '$' + value.toFixed(2);
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                }
+            }
+        });
+
+        const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+        new Chart(monthlyCtx, {
+            type: 'line',
+            data: {
+                labels: monthLabels,
+                datasets: [{
+                    label: 'Number of Bookings',
+                    data: monthData,
+                    borderColor: 'rgba(23, 162, 184, 1)',
+                    backgroundColor: 'rgba(23, 162, 184, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+}
