@@ -11,6 +11,8 @@ builder.Services.AddGrpc();
 builder.Services.AddDbContext<HotelReservationsDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("HotelReservationsDbContext")));
 
+builder.Services.AddHttpClient();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline

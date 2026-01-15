@@ -1,0 +1,118 @@
+﻿@model Ciciovan_Bogdan_Ionut_HotelReservations.Models.PredictionHistory
+
+@{
+    ViewData["Title"] = "Prediction Details";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="bi bi-info-circle"></i> Prediction Details
+        </h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Prediction Information</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-4">Prediction ID:</dt>
+                        <dd class="col-sm-8">@Model.Id</dd>
+
+                        <dt class="col-sm-4">Created At:</dt>
+                        <dd class="col-sm-8">@Model.CreatedAt.ToString("dddd, MMMM dd, yyyy HH:mm:ss")</dd>
+
+                        <dt class="col-sm-4">Customer Email:</dt>
+                        <dd class="col-sm-8">
+                            <span class="badge bg-info">@Model.CustomerEmail</span>
+                        </dd>
+
+                        <dt class="col-sm-4">Predicted Label:</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.PredictedLabel == "Canceled")
+                            {
+                                <span class="badge bg-danger fs-6">@Model.PredictedLabel</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-success fs-6">@Model.PredictedLabel</span>
+                            }
+                        </dd>
+
+                        <dt class="col-sm-4">Probability:</dt>
+                        <dd class="col-sm-8">
+                            <div class="progress" style="height: 30px;">
+                                <div class="progress-bar @(Model.Probability > 0.1 ? "bg-danger" : Model.Probability > 0.03 ? "bg-warning" : "bg-success")"
+                                     role="progressbar"
+                                     style="width: @(Model.Probability * 100)%">
+                                    @(Model.Probability.ToString("P2"))
+                                </div>
+                            </div>
+                        </dd>
+
+                        <dt class="col-sm-4">Risk Level:</dt>
+                        <dd class="col-sm-8">
+                            @if (Model.RiskLevel.Contains("High"))
+                            {
+                                <span class="badge bg-danger fs-6">@Model.RiskLevel</span>
+                            }
+                            else if (Model.RiskLevel.Contains("Medium"))
+                            {
+                                <span class="badge bg-warning text-dark fs-6">@Model.RiskLevel</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-info fs-6">@Model.RiskLevel</span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Recommendation</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0">@Model.Recommendation</p>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.RequestDataJson))
+            {
+                <div class="card shadow">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0">Request Data (JSON)</h5>
+                    </div>
+                    <div class="card-body">
+                        <pre class="bg-light p-3 rounded"><code>@Model.RequestDataJson</code></pre>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-grid gap-2">
+                        <a asp-action="Index" class="btn btn-outline-primary">
+                            <i class="bi bi-list"></i> View All Predictions
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger">
+                            <i class="bi bi-trash"></i> Delete This Prediction
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

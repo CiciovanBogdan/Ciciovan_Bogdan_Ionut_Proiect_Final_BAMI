@@ -15,6 +15,7 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Data
         public DbSet<MealPlan> MealPlans { get; set; }
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<BookingHistory> BookingHistories { get; set; }
+        public DbSet<PredictionHistory> PredictionHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -77,6 +78,14 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Data
                     .WithMany(b => b.BookingHistories)
                     .HasForeignKey(h => h.BookingId)
                     .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<PredictionHistory>(entity =>
+            {
+                entity.HasKey(e => e.Id);
+                entity.Property(e => e.PredictedLabel).IsRequired().HasMaxLength(20);
+                entity.Property(e => e.RiskLevel).IsRequired();
+                entity.Property(e => e.CreatedAt).IsRequired();
             });
 
             SeedData(modelBuilder);

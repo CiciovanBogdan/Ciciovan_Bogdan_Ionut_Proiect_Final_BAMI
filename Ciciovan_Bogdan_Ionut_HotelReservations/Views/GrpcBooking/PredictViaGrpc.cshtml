@@ -1,0 +1,257 @@
+﻿@using BookingCalculationsGrpcService
+
+@{
+    ViewData["Title"] = "ML Prediction via gRPC";
+}
+
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>
+            <i class="bi bi-lightning-charge"></i> ML Prediction via gRPC
+        </h2>
+        <a asp-action="Index" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to gRPC Menu
+        </a>
+    </div>
+
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-body">
+                    <form asp-action="PredictViaGrpc" method="post">
+                        
+                        <!-- Customer Information -->
+                        <div class="card mb-3">
+                            <div class="card-header bg-primary text-white">
+                                <i class="bi bi-person"></i> Customer Information
+                            </div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label class="form-label">Customer Email (for enrichment)</label>
+                                    <input type="email" name="customerEmail" class="form-control" 
+                                           placeholder="john.doe@example.com" />
+                                    <small class="text-muted">
+                                        Enter existing customer email to get enriched predictions
+                                    </small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Guest Information -->
+                        <div class="card mb-3">
+                            <div class="card-header bg-success text-white">
+                                <i class="bi bi-people"></i> Guest Information
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Adults</label>
+                                        <input type="number" name="noOfAdults" class="form-control" 
+                                               value="2" min="1" max="10" required />
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Children</label>
+                                        <input type="number" name="noOfChildren" class="form-control" 
+                                               value="0" min="0" max="10" />
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Repeated Guest</label>
+                                        <select name="isRepeatedGuest" class="form-select">
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Previous Cancellations</label>
+                                        <input type="number" name="noPreviousCancellations" 
+                                               class="form-control" value="0" min="0" max="50" />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Previous Bookings (Not Canceled)</label>
+                                        <input type="number" name="noPreviousBookingsNotCanceled" 
+                                               class="form-control" value="0" min="0" max="50" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Stay Details -->
+                        <div class="card mb-3">
+                            <div class="card-header bg-info text-white">
+                                <i class="bi bi-calendar-check"></i> Stay Details
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Weekend Nights</label>
+                                        <input type="number" name="noOfWeekendNights" class="form-control" 
+                                               value="2" min="0" max="30" required />
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Week Nights</label>
+                                        <input type="number" name="noOfWeekNights" class="form-control" 
+                                               value="3" min="0" max="30" required />
+                                    </div>
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Room Type</label>
+                                        <select name="roomTypeReserved" class="form-select" 
+                                                asp-items="ViewBag.RoomTypes"></select>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Meal Plan</label>
+                                    <select name="typeOfMealPlan" class="form-select" 
+                                            asp-items="ViewBag.MealPlans"></select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Booking Details -->
+                        <div class="card mb-3">
+                            <div class="card-header bg-warning text-dark">
+                                <i class="bi bi-calendar-event"></i> Booking Details
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Lead Time (days)</label>
+                                        <input type="number" name="leadTime" class="form-control" 
+                                               value="30" min="0" max="365" required />
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Avg Price Per Room ($)</label>
+                                        <input type="number" step="0.01" name="avgPricePerRoom" 
+                                               class="form-control" value="100" min="0" required />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Arrival Month</label>
+                                        <select name="arrivalMonth" class="form-select" required>
+                                            <option value="1">January</option>
+                                            <option value="2">February</option>
+                                            <option value="3">March</option>
+                                            <option value="4">April</option>
+                                            <option value="5">May</option>
+                                            <option value="6">June</option>
+                                            <option value="7">July</option>
+                                            <option value="8">August</option>
+                                            <option value="9">September</option>
+                                            <option value="10">October</option>
+                                            <option value="11">November</option>
+                                            <option value="12">December</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Special Requests</label>
+                                        <input type="number" name="noOfSpecialRequests" class="form-control" 
+                                               value="0" min="0" max="10" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Market Segment</label>
+                                        <select name="marketSegmentType" class="form-select" 
+                                                asp-items="ViewBag.MarketSegments"></select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Car Parking Required?</label>
+                                        <select name="requiredCarParkingSpace" class="form-select">
+                                            <option value="0">No</option>
+                                            <option value="1">Yes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="bi bi-lightning-charge"></i> Predict via gRPC
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Prediction Result -->
+            @if (ViewBag.Result != null)
+            {
+                var result = ViewBag.Result as PredictionReply;
+                var headerColor = result.PredictedLabel == "Canceled" ? "bg-danger" : "bg-success";
+
+                <div class="card mt-4 shadow border-0">
+                    <div class="card-header @headerColor text-white">
+                        <h4 class="mb-0">
+                            <i class="bi bi-check-circle"></i> Enhanced Prediction Result
+                        </h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="text-center mb-4">
+                            <h2 class="fw-bold">@result.PredictedLabel</h2>
+                        </div>
+
+                        <!-- Probability -->
+                        <div class="mb-4">
+                            <h6 class="mb-2">Cancellation Probability</h6>
+                            <div class="progress" style="height: 30px;">
+                                <div class="progress-bar @(result.Probability > 0.1 ? "bg-danger" : result.Probability > 0.03 ? "bg-warning" : "bg-success")"
+                                     role="progressbar"
+                                     style="width: @(result.Probability * 100)%">
+                                    @(result.Probability.ToString("P2"))
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Risk Level -->
+                        <div class="alert alert-@(result.RiskLevel.Contains("High") ? "danger" : result.RiskLevel.Contains("Medium") ? "warning" : "info")">
+                            <strong><i class="bi bi-exclamation-triangle"></i> Risk Level:</strong> @result.RiskLevel
+                        </div>
+
+                        <!-- Recommendation -->
+                        <div class="card bg-light mb-3">
+                            <div class="card-body">
+                                <h6 class="card-title">
+                                    <i class="bi bi-lightbulb"></i> Recommendation:
+                                </h6>
+                                <p class="mb-0">@result.Recommendation</p>
+                            </div>
+                        </div>
+
+                        <!-- ✅ Customer Insight (Enhanced Data) -->
+                        @if (!string.IsNullOrEmpty(result.CustomerInsight))
+                        {
+                            <div class="card bg-info bg-opacity-10 mb-3">
+                                <div class="card-body">
+                                    <h6 class="card-title">
+                                        <i class="bi bi-person-badge"></i> Customer Insight (DB Enrichment):
+                                    </h6>
+                                    <p class="mb-0">@result.CustomerInsight</p>
+                                </div>
+                            </div>
+                        }
+
+                        <!-- History Record ID -->
+                        <div class="alert alert-secondary mb-0">
+                            <small>
+                                <i class="bi bi-database"></i> 
+                                <strong>Prediction saved to history.</strong> Record ID: @result.HistoryRecordId<br/>
+                                <i class="bi bi-diagram-3"></i> 
+                                <strong>Processing:</strong> MVC → gRPC Service → ML API → Database Enrichment
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger mt-4">
+                    <i class="bi bi-exclamation-triangle"></i> @ViewBag.Error
+                    </div>
+            }
+        </div>
+    </div>
+</div>

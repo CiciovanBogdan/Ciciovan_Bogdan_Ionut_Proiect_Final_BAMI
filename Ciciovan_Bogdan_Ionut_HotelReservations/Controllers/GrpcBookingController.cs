@@ -1,6 +1,9 @@
-﻿using Grpc.Net.Client;
+﻿using BookingCalculationsGrpcService;
+using Grpc.Net.Client;
 using Microsoft.AspNetCore.Mvc;
-using BookingCalculationsGrpcService;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Ciciovan_Bogdan_Ionut_HotelReservations.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
 {
@@ -8,10 +11,15 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
     {
         private readonly GrpcChannel _channel;
         private readonly ILogger<GrpcBookingController> _logger;
+        private readonly HotelReservationsDbContext _context;
 
-        public GrpcBookingController(ILogger<GrpcBookingController> logger, IConfiguration configuration)
+        public GrpcBookingController(
+            ILogger<GrpcBookingController> logger,
+            IConfiguration configuration,
+            HotelReservationsDbContext context)
         {
             _logger = logger;
+            _context = context;
 
             var grpcUrl = configuration.GetValue<string>("GrpcServices:BookingCalculations")
                           ?? "https://localhost:7020";
@@ -92,6 +100,108 @@ namespace Ciciovan_Bogdan_Ionut_HotelReservations.Controllers
                 ViewBag.Error = $"Error: {ex.Message}";
                 return View(new BookingListReply());
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> PredictViaGrpc()
+        {
+            await PopulateDropdowns();
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PredictViaGrpc(
+            string customerEmail,
+            int noOfAdults,
+            int noOfChildren,
+            int noOfWeekendNights,
+            int noOfWeekNights,
+            int typeOfMealPlan,
+            int requiredCarParkingSpace,
+            int roomTypeReserved,
+            int leadTime,
+            int arrivalMonth,
+            float avgPricePerRoom,
+            int noOfSpecialRequests,
+            string marketSegmentType,
+            int isRepeatedGuest,
+            int noPreviousCancellations,
+            int noPreviousBookingsNotCanceled)
+        {
+            try
+            {
+                var client = new BookingCalculations.BookingCalculationsClient(_channel);
+
+                var request = new PredictionRequest
+                {
+                    CustomerEmail = customerEmail ?? "",
+                    NoOfAdults = noOfAdults,
+                    NoOfChildren = noOfChildren,
+                    NoOfWeekendNights = noOfWeekendNights,
+                    NoOfWeekNights = noOfWeekNights,
+                    TypeOfMealPlan = typeOfMealPlan,
+                    RequiredCarParkingSpace = requiredCarParkingSpace,
+                    RoomTypeReserved = roomTypeReserved,
+                    LeadTime = leadTime,
+                    ArrivalMonth = arrivalMonth,
+                    AvgPricePerRoom = avgPricePerRoom,
+                    NoOfSpecialRequests = noOfSpecialRequests,
+                    MarketSegmentType = marketSegmentType,
+                    IsRepeatedGuest = isRepeatedGuest,
+                    NoPreviousCancellations = noPreviousCancellations,
+                    NoPreviousBookingsNotCanceled = noPreviousBookingsNotCanceled
+                };
+
+                var reply = await client.PredictCancellationAsync(request);
+
+                ViewBag.Result = reply;
+                await PopulateDropdowns();
+
+                return View();
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Error = $"Error: {ex.Message}";
+                await PopulateDropdowns();
+
+                return View();
+            }
+        }
+
+        private async Task PopulateDropdowns()
+        {
+            var customers = await _context.Customers
+                .Select(c => new {
+                    Email = c.Email,
+                    DisplayText = c.FirstName + " " + c.LastName + " (" + c.Email + ")"
+                })
+                .ToListAsync();
+
+            ViewBag.Customers = new SelectList(customers, "Email", "DisplayText");
+
+            var roomTypes = await _context.RoomTypes
+                .Where(r => r.IsActive)
+                .Select(r => new {
+                    Value = r.RoomTypeId,
+                    Text = r.RoomTypeName + " - " + r.Description
+                })
+                .ToListAsync();
+
+            ViewBag.RoomTypes = new SelectList(roomTypes, "Value", "Text");
+
+            var mealPlans = await _context.MealPlans
+                .Where(m => m.IsActive)
+                .Select(m => new {
+                    Value = m.MealPlanId - 1,
+                    Text = m.PlanName + " - " + m.Description
+                })
+                .ToListAsync();
+
+            ViewBag.MealPlans = new SelectList(mealPlans, "Value", "Text");
+
+            ViewBag.MarketSegments = new SelectList(new[] {
+                "Online", "Offline", "Corporate", "Aviation", "Complementary"
+            });
         }
 
         protected override void Dispose(bool disposing)

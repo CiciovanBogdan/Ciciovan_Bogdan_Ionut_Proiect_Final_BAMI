@@ -1,0 +1,49 @@
+﻿@model Ciciovan_Bogdan_Ionut_HotelReservations.Models.PredictionHistory
+
+@{
+    ViewData["Title"] = "Delete Prediction";
+}
+
+<div class="container mt-4">
+    <h2 class="text-danger">
+        <i class="bi bi-trash"></i> Delete Prediction
+    </h2>
+
+    <div class="alert alert-warning mt-3">
+        <i class="bi bi-exclamation-triangle"></i>
+        Are you sure you want to delete this prediction history?
+    </div>
+
+    <div class="card shadow">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-3">Prediction ID:</dt>
+                <dd class="col-sm-9">@Model.Id</dd>
+
+                <dt class="col-sm-3">Created At:</dt>
+                <dd class="col-sm-9">@Model.CreatedAt.ToString("yyyy-MM-dd HH:mm:ss")</dd>
+
+                <dt class="col-sm-3">Customer Email:</dt>
+                <dd class="col-sm-9">@Model.CustomerEmail</dd>
+
+                <dt class="col-sm-3">Predicted Label:</dt>
+                <dd class="col-sm-9">@Model.PredictedLabel</dd>
+
+                <dt class="col-sm-3">Risk Level:</dt>
+                <dd class="col-sm-9">@Model.RiskLevel</dd>
+            </dl>
+
+            <form asp-action="Delete" method="post">
+                <input type="hidden" asp-for="Id" />
+                <div class="d-flex gap-2">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash"></i> Delete
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">
+                        <i class="bi bi-x-circle"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
